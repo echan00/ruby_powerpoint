@@ -139,7 +139,7 @@ module RubyPowerpoint
         end
       end
 
-      result = @slide_file_name[0:-4]+"-converted.pptx" 
+      result = @slide_file_name[0...-4]+"-converted.pptx" 
       # Rubyzip does not create a valid zip file in whatever way this is attempted
       # Alternative in commandline
       name = @presentation.files.name
