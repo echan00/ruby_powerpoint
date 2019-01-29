@@ -46,10 +46,6 @@ module RubyPowerpoint
       content_elements @slide_xml
     end
 
-    def update_content(new_content)
-      @slide_xml.xpath('//a:t')[0].content = new_content
-    end
-    
     def notes_content      
       if @slide_notes_xml
         content_elements @slide_notes_xml
