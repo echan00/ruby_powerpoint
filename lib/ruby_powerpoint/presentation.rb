@@ -29,8 +29,12 @@ module RubyPowerpoint
     end
     
     def save_and_return(slides)
+      puts "@@"
+      puts slides
       @files.each_with_index do |f, index|
         if f.name.include? 'ppt/slides/slide'          
+          puts "!!"
+          puts slides
           @replace[f.name] = slides[index].ret_slide_xml
         end
       end
