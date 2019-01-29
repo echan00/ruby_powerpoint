@@ -32,7 +32,6 @@ module RubyPowerpoint
       self.slides.each_with_index do |slide, index|
         @replace["slide"+slide.slide_num.to_s+".xml"] = slides[index].ret_slide_xml
       end
-      puts @replace
       stringio = Zip::OutputStream.write_buffer do |out|
         @files.each do |entry|
           out.put_next_entry(entry.name)
