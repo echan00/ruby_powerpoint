@@ -183,6 +183,10 @@ module RubyPowerpoint
     def paragraphs_xml
       @slide_xml.xpath('//a:p')
     end    
+
+    def ret_slide_xml
+      @slide_xml
+    end      
     
     private
 
