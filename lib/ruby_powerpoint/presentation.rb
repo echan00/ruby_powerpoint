@@ -12,25 +12,26 @@ module RubyPowerpoint
       raise 'Not a valid file format.' unless (['.pptx'].include? File.extname(path).downcase)
       @files = Zip::File.open path
       @replace = {}
+      @slides = Array.new
+      @files.each do |f|
+        if f.name.include? 'ppt/slides/slide'
+          @slides.push RubyPowerpoint::Slide.new(self, f.name)
+        end
+      end
+      @slides.sort{|a,b| a.slide_num <=> b.slide_num}
     end
 
     def slides
-      slides = Array.new
-      @files.each do |f|
-        if f.name.include? 'ppt/slides/slide'
-          slides.push RubyPowerpoint::Slide.new(self, f.name)
-        end
-      end
-      slides.sort{|a,b| a.slide_num <=> b.slide_num}
+      return @slides
     end
-
+    
     def close
       @files.close
     end
     
-    def save_and_return(slides)
-      self.slides.each_with_index do |slide, index|
-        @replace["slide"+slide.slide_num.to_s+".xml"] = slides[index].ret_slide_xml
+    def save_and_return(old_slides)
+      @slides.each_with_index do |slide, index|
+        @replace["slide"+slide.slide_num.to_s+".xml"] = old_slides[index].ret_slide_xml
       end
       stringio = Zip::OutputStream.write_buffer do |out|
         @files.each do |entry|
