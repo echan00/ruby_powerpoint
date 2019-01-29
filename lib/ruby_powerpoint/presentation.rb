@@ -44,7 +44,7 @@ module RubyPowerpoint
           end
         end
       end
-      zip.close
+      @files.close
       return stringio
     end    
     
