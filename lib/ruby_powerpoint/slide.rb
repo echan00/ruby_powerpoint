@@ -180,6 +180,10 @@ module RubyPowerpoint
       paragraph_element @slide_xml
     end
 
+    def paragraphs_xml
+      @slide_xml.xpath('//a:p')
+    end    
+    
     private
 
     def extract_slide_number_from_path path
