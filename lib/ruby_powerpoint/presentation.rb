@@ -1,3 +1,4 @@
+require 'zip'
 require 'zip/filesystem'
 require 'nokogiri'
 
@@ -10,6 +11,7 @@ module RubyPowerpoint
     def initialize path
       raise 'Not a valid file format.' unless (['.pptx'].include? File.extname(path).downcase)
       @files = Zip::File.open path
+      @replace = {}
     end
 
     def slides
@@ -25,5 +27,28 @@ module RubyPowerpoint
     def close
       @files.close
     end
+    
+    def save_and_return(slides)
+      @files.each_with_index do |f, index|
+        if f.name.include? 'ppt/slides/slide'          
+          @replace[f.name] = slides[index].ret_slide_xml
+        end
+      end
+      
+      stringio = Zip::OutputStream.write_buffer do |out|
+        @files.each do |entry|
+          out.put_next_entry(entry.name)
+
+          if @replace[entry.name]
+            out.write(@replace[entry.name])
+          else
+            out.write(@files.read(entry.name))
+          end
+        end
+      end
+      zip.close
+      return stringio
+    end    
+    
   end
 end
