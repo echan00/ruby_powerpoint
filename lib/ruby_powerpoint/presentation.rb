@@ -29,16 +29,10 @@ module RubyPowerpoint
     end
     
     def save_and_return(slides)
-      puts "@@"
-      puts slides
-      @files.each_with_index do |f, index|
-        if f.name.include? 'ppt/slides/slide'          
-          puts "!!"
-          puts slides
-          @replace[f.name] = slides[index].ret_slide_xml
-        end
+      self.slides.each_with_index do |slide, index|
+        @replace["slide"+slide.slide_num.to_s+".xml"] = slides[index].ret_slide_xml
       end
-      
+      puts @replace
       stringio = Zip::OutputStream.write_buffer do |out|
         @files.each do |entry|
           out.put_next_entry(entry.name)
