@@ -125,6 +125,82 @@ module RubyPowerpoint
         return
       end
     end
+
+    def update_text(old_text, new_text)
+        # Find the title
+        temp = nil
+        @slide_xml.xpath('//p:sp').each do |node|
+          if(element_is_title(node))
+            node.xpath('//a:t').each do |attempt|
+              if(attempt.content == old_title)
+                puts attempt.content
+                attempt.content = new_title
+              end
+            end
+          end
+        end
+
+        # Rubyzip does not create a valid zip file in whatever way this is attempted
+        # Alternative in commandline
+        name = @presentation.files.name
+        if(name.include? '/')
+          folder = name[0..name.rindex('/')]
+          result = folder + result
+        end
+      
+        xmlFiles = 'docProps ppt _rels [Content_Types].xml'
+        
+        # unzip the pptx
+        `unzip #{name}`
+
+        # overwrite the necessary file
+        File.open(@slide_xml_path, 'w+') { |f| f.write(@slide_xml.to_s) }
+
+        # zip the pptx
+        `zip #{result} -r #{xmlFiles}`
+
+        # remove the folders
+        `rm -rf #{xmlFiles}`
+        return
+    end    
+
+    def update_texts(old_texts, new_texts)
+      # Find the title
+      temp = nil
+      old_texts.each_with_index do |old_text, idx|
+        @slide_xml.xpath('//p:sp').each do |node|
+          node.xpath('//a:t').each do |attempt|
+            if(attempt.content == old_text)
+              attempt.content = new_texts[idx]
+            end
+          end
+        end
+      end
+
+      result = @slide_file_name[0:-4]+"-converted.pptx" 
+      # Rubyzip does not create a valid zip file in whatever way this is attempted
+      # Alternative in commandline
+      name = @presentation.files.name
+      if(name.include? '/')
+        folder = name[0..name.rindex('/')]
+        result = folder + result
+      end
+
+      xmlFiles = 'docProps ppt _rels [Content_Types].xml'
+
+      # unzip the pptx
+      `unzip #{name}`
+
+      # overwrite the necessary file
+      File.open(@slide_xml_path, 'w+') { |f| f.write(@slide_xml.to_s) }
+
+      # zip the pptx
+      `zip #{result} -r #{xmlFiles}`
+
+      # remove the folders
+      `rm -rf #{xmlFiles}`
+      return
+    end        
     
     def images
       image_elements(@relation_xml)
