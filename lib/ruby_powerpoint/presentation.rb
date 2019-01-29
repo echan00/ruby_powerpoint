@@ -29,8 +29,11 @@ module RubyPowerpoint
       @files.close
     end
     
-    def save_and_return(old_slides)
+    def save_and_return(old_slides)      
       @slides.each_with_index do |slide, index|
+        puts "slide"+slide.slide_num.to_s+".xml"
+        puts old_slides[index].content
+        puts "!!!"
         @replace["slide"+slide.slide_num.to_s+".xml"] = old_slides[index].ret_slide_xml
       end
       stringio = Zip::OutputStream.write_buffer do |out|
