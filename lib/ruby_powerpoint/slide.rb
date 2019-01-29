@@ -185,7 +185,7 @@ module RubyPowerpoint
     end    
 
     def ret_slide_xml
-      @slide_xml
+      return @slide_xml
     end      
     
     private
