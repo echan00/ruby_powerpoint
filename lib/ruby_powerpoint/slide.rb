@@ -11,15 +11,16 @@ module RubyPowerpoint
 
     def initialize presentation, slide_xml_path, data
       @presentation = presentation
+      @data = data      
       @slide_xml_path = slide_xml_path
-      if data == 0
+      if @data == 0
         @slide_number = extract_slide_number_from_path slide_xml_path
         @slide_file_name = extract_slide_file_name_from_path slide_xml_path        
         @slide_notes_xml_path = "ppt/notesSlides/notesSlide#{@slide_number}.xml"
-      elsif data == 1
+      elsif @data == 1
         @slide_number = extract_diagram_number_from_path slide_xml_path    
         @slide_file_name = extract_diagram_file_name_from_path slide_xml_path        
-      elsif data == 2        
+      elsif @data == 2        
         @slide_number = extract_chart_number_from_path slide_xml_path
         @slide_file_name = extract_chart_file_name_from_path slide_xml_path        
       end
@@ -181,7 +182,13 @@ module RubyPowerpoint
     end
 
     def slide_num
-      @slide_xml_path.match(/slide([0-9]*)\.xml$/)[1].to_i
+      if @data == 0
+        @slide_xml_path.match(/slide([0-9]*)\.xml$/)[1].to_i
+      elsif @data == 1
+        @slide_xml_path.match(/data([0-9]*)\.xml$/)[1].to_i
+      elsif @data == 2
+        @slide_xml_path.match(/chart([0-9]*)\.xml$/)[1].to_i
+      end
     end
 
     def paragraphs
