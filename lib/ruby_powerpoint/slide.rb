@@ -33,6 +33,8 @@ module RubyPowerpoint
     def parse_slide      
       slide_doc = @presentation.files.file.open @slide_xml_path
       @slide_xml = Nokogiri::XML::Document.parse slide_doc    
+      @slide_xml.root.add_namespace('c', 'http://schemas.openxmlformats.org/drawingml/2006/chart' )
+      @slide_xml.root.add_namespace('a', 'http://schemas.openxmlformats.org/drawingml/2006/main' )
     end
 
     def parse_slide_notes
