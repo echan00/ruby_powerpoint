@@ -32,7 +32,7 @@ module RubyPowerpoint
 
     def parse_slide      
       slide_doc = @presentation.files.file.open @slide_xml_path
-      slide_doc = Nokogiri::XML::Document.parse slide_doc    
+      @slide_xml = Nokogiri::XML::Document.parse slide_doc    
     end
 
     def parse_slide_notes
