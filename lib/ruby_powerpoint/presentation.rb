@@ -54,10 +54,10 @@ module RubyPowerpoint
         @replace["ppt/slides/slide"+slide.slide_num.to_s+".xml"] = old_slides[index].ret_slide_xml.serialize(:save_with => 0)
       end
       @diagrams.each_with_index do |diagram, index|
-        @replace["ppt/diagrams/data"+diagram.slide_num.to_s+".xml"] = old_diagrams[index].ret_diagram_xml.serialize(:save_with => 0)
+        @replace["ppt/diagrams/data"+diagram.slide_num.to_s+".xml"] = old_diagrams[index].ret_slide_xml.serialize(:save_with => 0)
       end
       @charts.each_with_index do |chart, index|
-        @replace["ppt/charts/chart"+chart.slide_num.to_s+".xml"] = old_charts[index].ret_chart_xml.serialize(:save_with => 0)
+        @replace["ppt/charts/chart"+chart.slide_num.to_s+".xml"] = old_charts[index].ret_slide_xml.serialize(:save_with => 0)
       end      
       stringio = Zip::OutputStream.write_buffer do |out|
         @files.each do |entry|
