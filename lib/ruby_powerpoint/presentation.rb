@@ -13,28 +13,23 @@ module RubyPowerpoint
       @files = Zip::File.open path
       @replace = {}
       
-      @slides = Array.new      
+      @slides = Array.new
+      @diagrams = Array.new      
+      @charts = Array.new      
+      
       @files.each do |f|
         if f.name.include? 'ppt/slides/slide'
           @slides.push RubyPowerpoint::Slide.new(self, f.name)
         end
-      end
-      @slides.sort{|a,b| a.slide_num <=> b.slide_num}
-
-      @diagrams = Array.new      
-      @files.each do |f|
         if f.name.include? 'ppt/diagrams/data'
           @diagrams.push RubyPowerpoint::Slide.new(self, f.name)
         end
-      end
-      @diagrams.sort{|a,b| a.diagram_num <=> b.diagram_num}
-
-      @charts = Array.new      
-      @files.each do |f|
         if f.name.include? 'ppt/charts/chart'
           @charts.push RubyPowerpoint::Slide.new(self, f.name)
-        end
+        end       
       end
+      @slides.sort{|a,b| a.slide_num <=> b.slide_num}
+      @diagrams.sort{|a,b| a.diagram_num <=> b.diagram_num}
       @charts.sort{|a,b| a.chart_num <=> b.chart_num}      
     end
 
