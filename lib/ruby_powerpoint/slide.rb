@@ -1,11 +1,11 @@
 require 'zip/filesystem'
 require 'nokogiri'
+require 'open-uri'
 
 module RubyPowerpoint
   class RubyPowerpoint::Slide
 
     attr_reader :presentation,
-                :slide_number,
                 :slide_number,
                 :slide_file_name
 
