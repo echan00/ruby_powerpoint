@@ -30,11 +30,12 @@ module RubyPowerpoint
       parse_relation
     end
 
-    def parse_slide
+    def parse_slide      
       slide_doc = @presentation.files.file.open @slide_xml_path
-      @slide_xml = Nokogiri::XML::Document.parse slide_doc
-      @slide_xml.root.add_namespace 'c', "http://schemas.openxmlformats.org/drawingml/2006/chart"
-      @slide_xml.root.add_namespace 'a', "http://schemas.openxmlformats.org/drawingml/2006/main"      
+      slide_doc = Nokogiri::XML::Document.parse slide_doc    
+      slide_doc.root['xmlns:c'] = "http://schemas.openxmlformats.org/drawingml/2006/chart"
+      slide_doc.root['xmlns:a'] = "http://schemas.openxmlformats.org/drawingml/2006/main"
+      @slide_xml = Nokogiri::XML(slide_doc.to_xml(:save_with => Nokogiri::XML::Node::SaveOptions::AS_XML))
     end
 
     def parse_slide_notes
