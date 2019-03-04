@@ -6,27 +6,25 @@ module RubyPowerpoint
 
     attr_reader :presentation,
                 :slide_number,
-                :diagram_number,
-                :chart_number,    
+                :slide_number,
                 :slide_file_name
 
-    def initialize presentation, slide_xml_path, diagram_xml_path, chart_xml_path      
+    def initialize presentation, slide_xml_path, data
       @presentation = presentation
       @slide_xml_path = slide_xml_path
-      @slide_number = extract_slide_number_from_path slide_xml_path
-
-      @diagram_xml_path = diagram_xml_path
-      @diagram_number = extract_slide_number_from_path diagram_xml_path      
-
-      @chart_xml_path = chart_xml_path
-      @chart_number = extract_slide_number_from_path chart_xml_path   
-
-      @slide_notes_xml_path = "ppt/notesSlides/notesSlide#{@slide_number}.xml"
-      @slide_file_name = extract_slide_file_name_from_path slide_xml_path
+      if data == 0
+        @slide_number = extract_slide_number_from_path slide_xml_path
+        @slide_file_name = extract_slide_file_name_from_path slide_xml_path        
+        @slide_notes_xml_path = "ppt/notesSlides/notesSlide#{@slide_number}.xml"
+      elsif data == 1
+        @slide_number = extract_diagram_number_from_path slide_xml_path    
+        @slide_file_name = extract_diagram_file_name_from_path slide_xml_path        
+      elsif data == 2        
+        @slide_number = extract_chart_number_from_path slide_xml_path
+        @slide_file_name = extract_chart_file_name_from_path slide_xml_path        
+      end
 
       parse_slide
-      parse_diagram
-      parse_chart    
       parse_slide_notes
       parse_relation
     end
@@ -36,16 +34,6 @@ module RubyPowerpoint
       @slide_xml = Nokogiri::XML::Document.parse slide_doc
     end
 
-    def parse_diagram
-      diagram_doc = @presentation.files.file.open @diagram_xml_path
-      @diagram_xml = Nokogiri::XML::Document.parse diagram_doc
-    end
-    
-    def parse_chart
-      chart_doc = @presentation.files.file.open @chart_xml_path
-      @chart_xml = Nokogiri::XML::Document.parse chart_doc
-    end    
-    
     def parse_slide_notes
       slide_notes_doc = @presentation.files.file.open @slide_notes_xml_path rescue nil
 
@@ -196,14 +184,6 @@ module RubyPowerpoint
       @slide_xml_path.match(/slide([0-9]*)\.xml$/)[1].to_i
     end
 
-    def diagram_num
-      @slide_xml_path.match(/data([0-9]*)\.xml$/)[1].to_i
-    end
-    
-    def chart_num
-      @slide_xml_path.match(/chart([0-9]*)\.xml$/)[1].to_i
-    end    
-    
     def paragraphs
       paragraph_element @slide_xml
     end
@@ -215,14 +195,6 @@ module RubyPowerpoint
     def ret_slide_xml
       return @slide_xml
     end      
-
-    def ret_diagram_xml
-      return @diagram_xml
-    end      
-    
-    def ret_chart_xml
-      return @chart_xml
-    end          
     
     private
 
@@ -248,7 +220,7 @@ module RubyPowerpoint
 
     def extract_chart_file_name_from_path path
       path.gsub('ppt/charts/', '')
-    end        
+    end      
     
     def title_elements(xml)
       shape_elements(xml).select{ |shape| element_is_title(shape) }
