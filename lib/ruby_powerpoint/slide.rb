@@ -224,11 +224,12 @@ module RubyPowerpoint
     end    
 
     def extract_chart_number_from_path path
-      path.gsub('ppt/charts/chart', '').gsub('.xml', '').to_i
+      
+      path.gsub('ppt/charts/chart', '').gsub('.xml', '').gsub('Ex', '').to_i
     end
 
     def extract_chart_file_name_from_path path
-      path.gsub('ppt/charts/', '')
+      path.gsub('ppt/charts/', '').gsub('Ex', '')
     end      
     
     def title_elements(xml)
