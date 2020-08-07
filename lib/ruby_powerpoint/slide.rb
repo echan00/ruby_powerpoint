@@ -185,11 +185,11 @@ module RubyPowerpoint
 
     def slide_num
       if @data == 0
-        @slide_xml_path.match(/slide([0-9]*)\.xml$/)[1].to_i
+        @slide_xml_path.match(/slide(Ex)?([0-9]*)\.xml$/)[2].to_i
       elsif @data == 1
-        @slide_xml_path.match(/data([0-9]*)\.xml$/)[1].to_i
+        @slide_xml_path.match(/data(Ex)?([0-9]*)\.xml$/)[2].to_i
       elsif @data == 2
-        @slide_xml_path.match(/chart([0-9]*)\.xml$/)[1].to_i
+        @slide_xml_path.match(/chart(Ex)?([0-9]*)\.xml$/)[2].to_i
       end
     end
 
@@ -208,23 +208,22 @@ module RubyPowerpoint
     private
 
     def extract_slide_number_from_path path
-      path.gsub('ppt/slides/slide', '').gsub('.xml', '').to_i
+      path.gsub('ppt/slides/slide', '').gsub('.xml', '').gsub('Ex', '').to_i
     end
 
     def extract_slide_file_name_from_path path
-      path.gsub('ppt/slides/', '')
+      path.gsub('ppt/slides/', '').gsub('Ex', '')
     end
 
     def extract_diagram_number_from_path path
-      path.gsub('ppt/diagrams/data', '').gsub('.xml', '').to_i
+      path.gsub('ppt/diagrams/data', '').gsub('.xml', '').gsub('Ex', '').to_i
     end
 
     def extract_diagram_file_name_from_path path
-      path.gsub('ppt/diagram/', '')
+      path.gsub('ppt/diagram/', '').gsub('Ex', '')
     end    
 
     def extract_chart_number_from_path path
-      
       path.gsub('ppt/charts/chart', '').gsub('.xml', '').gsub('Ex', '').to_i
     end
 
