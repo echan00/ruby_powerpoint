@@ -63,8 +63,10 @@ module RubyPowerpoint
         @files.each do |entry|
           out.put_next_entry(entry.name)
 
+          puts entry.name
           if @replace[entry.name]
             out.write(@replace[entry.name])
+          elsif entry.directory?
           else
             out.write(@files.read(entry.name))
           end
